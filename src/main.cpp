@@ -4,6 +4,7 @@
 #include <Adafruit_SSD1306.h>
 #include <Encoder.h>
 #include "OneButton.h"
+#include <Servo.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
@@ -23,6 +24,9 @@ volatile long oldPosition = -999;
 #define BUT_PIN 4
 OneButton button(BUT_PIN, true);
 volatile long count = 0;
+
+Servo myservo; // create servo object to control a servo
+int pos = 0;   // variable to store the servo position
 
 #define LOGO_HEIGHT 16
 #define LOGO_WIDTH 16
@@ -52,6 +56,8 @@ void setup()
 {
   Serial.begin(9600);
 
+  myservo.attach(5);
+
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
   {
@@ -74,7 +80,20 @@ void setup()
   // Show the display buffer on the screen. You MUST call display() after
   // drawing commands to make them visible on screen!
   display.display();
-  
+
+  Serial.println("Basic Servo Test:");
+  for (pos = 0; pos <= 180; pos += 1)
+  { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    myservo.write(pos); // tell servo to go to position in variable 'pos'
+    delay(15);          // waits 15 ms for the servo to reach the position
+  }
+  for (pos = 180; pos >= 0; pos -= 1)
+  {                     // goes from 180 degrees to 0 degrees
+    myservo.write(pos); // tell servo to go to position in variable 'pos'
+    delay(15);          // waits 15 ms for the servo to reach the position
+  }
+
   Serial.println("Basic Encoder Test:");
 
   // link the doubleclick function to be called on a click events.
