@@ -1,10 +1,12 @@
 #include <Arduino.h>
 #include <Wire.h>
+#define SSD1306_NO_SPLASH
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <Encoder.h>
 #include "OneButton.h"
-#include <Servo.h>
+// #include <Servo.h>
+#include <VarSpeedServo.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
@@ -25,28 +27,19 @@ volatile long oldPosition = -999;
 OneButton button(BUT_PIN, true);
 volatile long count = 0;
 
-Servo myservo; // create servo object to control a servo
-int pos = 0;   // variable to store the servo position
+#define SPEED1 40
+#define SPEED2 30
+VarSpeedServo myservo; // create servo object to control a servo
+int pos = 0;           // variable to store the servo position
 
-#define LOGO_HEIGHT 16
-#define LOGO_WIDTH 16
+#define LOGO_HEIGHT 24
+#define LOGO_WIDTH 24
 static const unsigned char PROGMEM logo_bmp[] =
-    {0b00000000, 0b11000000,
-     0b00000001, 0b11000000,
-     0b00000001, 0b11000000,
-     0b00000011, 0b11100000,
-     0b11110011, 0b11100000,
-     0b11111110, 0b11111000,
-     0b01111110, 0b11111111,
-     0b00110011, 0b10011111,
-     0b00011111, 0b11111100,
-     0b00001101, 0b01110000,
-     0b00011011, 0b10100000,
-     0b00111111, 0b11100000,
-     0b00111111, 0b11110000,
-     0b01111100, 0b11110000,
-     0b01110000, 0b01110000,
-     0b00000000, 0b00110000};
+    {0x00, 0xff, 0x00, 0x07, 0xff, 0xe0, 0x0f, 0x00, 0xf0, 0x1c, 0x00, 0x30, 0x18, 0x00, 0x18, 0x18, 
+	0x00, 0x18, 0x18, 0x00, 0x18, 0x18, 0x00, 0x18, 0x18, 0x00, 0x18, 0x3f, 0xff, 0xfc, 0x7f, 0xff, 
+	0xfe, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xff, 0xff, 0xc1, 0xff, 0xff, 0x80, 0xff, 0xff, 0x81, 0xff, 
+	0xff, 0xe3, 0xff, 0xff, 0xe7, 0xff, 0xff, 0xe7, 0xff, 0xff, 0xe7, 0xff, 0xff, 0xff, 0xff, 0xff, 
+	0xff, 0xff, 0x7f, 0xff, 0xff, 0x3f, 0xff, 0xfc};
 #define NUMFLAKES 10 // Number of snowflakes in the animation example
 
 void doubleClick(void);
@@ -56,7 +49,7 @@ void setup()
 {
   Serial.begin(9600);
 
-  myservo.attach(5);
+  myservo.attach(6);
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
@@ -75,24 +68,18 @@ void setup()
   display.clearDisplay();
 
   // Draw a single pixel in white
-  display.drawPixel(10, 10, SSD1306_WHITE);
+  display.drawBitmap(SCREEN_WIDTH/2 - LOGO_WIDTH/2, SCREEN_HEIGHT/2 - LOGO_HEIGHT/2, logo_bmp, LOGO_WIDTH, LOGO_HEIGHT, WHITE);
 
   // Show the display buffer on the screen. You MUST call display() after
   // drawing commands to make them visible on screen!
   display.display();
 
   Serial.println("Basic Servo Test:");
-  for (pos = 0; pos <= 180; pos += 1)
-  { // goes from 0 degrees to 180 degrees
-    // in steps of 1 degree
-    myservo.write(pos); // tell servo to go to position in variable 'pos'
-    delay(15);          // waits 15 ms for the servo to reach the position
-  }
-  for (pos = 180; pos >= 0; pos -= 1)
-  {                     // goes from 180 degrees to 0 degrees
-    myservo.write(pos); // tell servo to go to position in variable 'pos'
-    delay(15);          // waits 15 ms for the servo to reach the position
-  }
+  myservo.write(90, SPEED1);
+  myservo.wait();
+  myservo.write(0, SPEED2);
+  myservo.wait();
+  myservo.detach();
 
   Serial.println("Basic Encoder Test:");
 
