@@ -1,39 +1,50 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
-#include <OneButton.h>
-#include <Encoder.h>
+#include "common_def.h"
 #include "icons.h"
-#include "shared.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
-#define KNOB_PIN 4
+
+#define BLINK_RATE_MS 250
 
 class Gui
 {
 public:
-    Gui() : oled(U8G2_R0, U8X8_PIN_NONE), enc(2, 3), button(KNOB_PIN) {}
+    Gui() : _oled(U8G2_R0, U8X8_PIN_NONE) {}
 
     void begin(void);
     void update(void);
 
+    void setPage(state_e page);
+    state_e getPage(void);
+
+    void setCodeNum(unsigned int position, unsigned int value);
+
+    void redraw(void);
+    void drawLockPage(void);
+    void drawCodePage(void);
+    void drawFirstNum(void);
+    void drawSecondNum(void);
+    void drawThirdNum(void);
+
 private:
-    U8G2_SSD1306_128X64_ALT0_F_HW_I2C oled;
-    Encoder enc;
-    OneButton button;
+    U8G2_SSD1306_128X64_ALT0_1_HW_I2C _oled;
 
-    volatile long _oldEncPos = -999;
-    volatile long _newEncPos = 0;
+    state_e _actPage = state_e::LOCK;
+    unsigned int _codeActNum[3] = {0 ,0 ,0};
 
-    void _checkButton(void);
-    void _singleClick(void);
-    void _doubleClick(void);
-    static void _singleClickEvent(Gui *gui)
-    {
-        gui->_singleClick();
-    }
-    static void _doubleClickEvent(Gui *gui)
-    {
-        gui->_doubleClick();
-    }
+    unsigned int _redraw;
+    unsigned int _redrawBusy = 0;
+
+    unsigned long _timeBlinkNow = 0;
+    unsigned long _timeBlinkOld = 0;
+    unsigned int _blinkStatus = 0;
+    unsigned int _renewCodePage = 0;
+
+    void _draw(void);
+    void _drawNum(unsigned int pos, int value);
+
+    void _timersUpdate(void);
+    void _timerBlinkUpdate(void);
 };
