@@ -8,7 +8,7 @@
 #include "lights.h"
 
 #define SERVO_PIN 6
-#define L_SPEED 15
+#define L_SPEED 20
 #define H_SPEED 100
 
 #define KNOB_PIN 4
