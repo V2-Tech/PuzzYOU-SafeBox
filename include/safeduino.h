@@ -10,22 +10,13 @@
 
 class Safeduino
 {
-private:
-    // Private constructor to prevent instantiation from outside
-    Safeduino() {}
-
-    // Private instance of the class
-    static Safeduino *instance;
-
 public:
-    // Public method to access the singleton instance
-    static Safeduino *getInstance();
+    Safeduino() {}
 
     void begin(void);
     void run(void);
 
 private:
-    Gui *display = Gui::getInstance();
     VarSpeedServo servo;
 
     int servoPos = 0;

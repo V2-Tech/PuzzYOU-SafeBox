@@ -1,18 +1,5 @@
 #include "gui.h"
 
-// Initialize the static instance to nullptr
-Gui *Gui::instance = nullptr;
-
-// Implementation of getInstance method
-Gui *Gui::getInstance()
-{
-    if (!instance)
-    {
-        instance = new Gui();
-    }
-    return instance;
-}
-
 void Gui::begin(void)
 {
     //----------------------------------------
@@ -37,8 +24,9 @@ void Gui::begin(void)
     //        INIT KNOB BUTTON
     //----------------------------------------
     Serial.println(F("Button Initialization"));
-    button.attachClick(_singleClickEvent);
-    button.attachDoubleClick(_doubleClickEvent);
+    //button.attachClick(_singleClickEvent, this);
+    //button.attachDoubleClick(_doubleClickEvent);
+    button.attachClick([](void *scope) { _singleClick;}, this);
     Serial.println(F("Button Initialization completed"));
 }
 

@@ -1,32 +1,23 @@
 #include "safeduino.h"
 
-// Initialize the static instance to nullptr
-Safeduino *Safeduino::instance = nullptr;
-
-// Implementation of getInstance method
-Safeduino *Safeduino::getInstance()
-{
-    if (!instance)
-    {
-        instance = new Safeduino();
-    }
-    return instance;
-}
+static Gui display;
 
 void Safeduino::begin(void)
 {
+    Serial.println(F("Safeduino initialization"));
     //----------------------------------------
     //        INIT SCREEN
     //----------------------------------------
-    //display->begin();
+    display.begin();
 
     //----------------------------------------
     //        INIT DOOR LOCK
     //----------------------------------------
     servo.attach(SERVO_PIN);
+    Serial.println(F("Safeduino initialization completed"));
 }
 
 void Safeduino::run(void)
 {
-    //display->update();
+    display.update();
 }

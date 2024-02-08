@@ -11,16 +11,8 @@
 
 class Gui
 {
-private:
-    // Private constructor to prevent instantiation from outside
-    Gui() : oled(U8G2_R0, U8X8_PIN_NONE), enc(2, 3), button(KNOB_PIN) {}
-
-    // Private instance of the class
-    static Gui *instance;
-
 public:
-    // Public method to access the singleton instance
-    static Gui *getInstance();
+    Gui() : oled(U8G2_R0, U8X8_PIN_NONE), enc(2, 3), button(KNOB_PIN) {}
 
     void begin(void);
     void update(void);
@@ -36,14 +28,12 @@ private:
     void _checkButton(void);
     void _singleClick(void);
     void _doubleClick(void);
-    static void _singleClickEvent(void)
+    static void _singleClickEvent(Gui *gui)
     {
-        Gui *gui = Gui::getInstance();
         gui->_singleClick();
     }
-    static void _doubleClickEvent(void)
+    static void _doubleClickEvent(Gui *gui)
     {
-        Gui *gui = Gui::getInstance();
         gui->_doubleClick();
     }
 };
