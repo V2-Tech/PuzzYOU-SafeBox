@@ -73,36 +73,52 @@ void Gui::drawFirstNum(void)
     if (_blinkStatus == 1)
     {
         _drawNum(0, -1);
-        _drawNum(1, _codeActNum[0]);
-        _drawNum(2, _codeActNum[0]);
+        _drawNum(1, _codeActNum[1]);
+        _drawNum(2, _codeActNum[2]);
         return;
     }
 
     _drawNum(0, _codeActNum[0]);
-    _drawNum(1, _codeActNum[0]);
-    _drawNum(2, _codeActNum[0]);
+    _drawNum(1, _codeActNum[1]);
+    _drawNum(2, _codeActNum[2]);
 }
 
 void Gui::drawSecondNum(void)
 {
     if (_blinkStatus == 1)
     {
-        _drawNum(1, 0);
+        _drawNum(0, _codeActNum[0]);
+        _drawNum(1, -1);
+        _drawNum(2, _codeActNum[2]);
         return;
     }
 
+    _drawNum(0, _codeActNum[0]);
     _drawNum(1, _codeActNum[1]);
+    _drawNum(2, _codeActNum[2]);
 }
 
 void Gui::drawThirdNum(void)
 {
     if (_blinkStatus == 1)
     {
-        _drawNum(2, 0);
+        _drawNum(0, _codeActNum[0]);
+        _drawNum(1, _codeActNum[1]);
+        _drawNum(2, -1);
         return;
     }
 
+    _drawNum(0, _codeActNum[0]);
+    _drawNum(1, _codeActNum[1]);
     _drawNum(2, _codeActNum[2]);
+}
+
+void Gui::drawSelection1(void)
+{
+}
+
+void Gui::drawUnlocked(void)
+{
 }
 
 void Gui::_draw(void)
@@ -118,15 +134,24 @@ void Gui::_draw(void)
             case LOCK:
                 drawLockPage();
                 break;
-
             case MAIN_PAGE:
                 drawCodePage();
                 break;
-
             case FIRST_NUM:
                 drawFirstNum();
                 break;
-
+            case SECOND_NUM:
+                drawSecondNum();
+                break;
+            case THIRD_NUM:
+                drawThirdNum();
+                break;
+            case SELECTION_1:
+                drawSelection1();
+                break;
+            case UNLOCKED:
+                drawUnlocked();
+                break;
             default:
                 break;
             }
@@ -159,13 +184,19 @@ void Gui::_drawNum(unsigned int pos, int value)
         break;
     case 1:
         // Draw second num
-        strcpy(m_str, u8x8_u8toa(value, 2));
+        if (value != -1)
+        {
+            strcpy(m_str, u8x8_u8toa(value, 2));
+        }
         _oled.drawButtonUTF8(3 * (buttonW / 2 + buttonSpace) + offsetX, startY, U8G2_BTN_SHADOW1 | U8G2_BTN_HCENTER | U8G2_BTN_BW2, buttonW, 1, 2, m_str);
 
         break;
     case 2:
         // Draw third num
-        strcpy(m_str, u8x8_u8toa(value, 2));
+        if (value != -1)
+        {
+            strcpy(m_str, u8x8_u8toa(value, 2));
+        }
         _oled.drawButtonUTF8(5 * (buttonW / 2 + buttonSpace) + offsetX, startY, U8G2_BTN_SHADOW1 | U8G2_BTN_HCENTER | U8G2_BTN_BW2, buttonW, 1, 2, m_str);
         break;
 

@@ -1,8 +1,8 @@
 #include <Arduino.h>
-#include "safeduino.h"
+#include "safebox.h"
 
 // Access the singleton instances
-Safeduino puzzle;
+Safebox puzzle;
 
 void setup()
 {

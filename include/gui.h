@@ -27,6 +27,8 @@ public:
     void drawFirstNum(void);
     void drawSecondNum(void);
     void drawThirdNum(void);
+    void drawSelection1(void);
+    void drawUnlocked(void);
 
 private:
     U8G2_SSD1306_128X64_ALT0_1_HW_I2C _oled;
@@ -36,12 +38,13 @@ private:
 
     unsigned int _redraw;
     unsigned int _redrawBusy = 0;
+    unsigned int _renewCodePage = 0;
 
     unsigned long _timeBlinkNow = 0;
     unsigned long _timeBlinkOld = 0;
     unsigned int _blinkStatus = 0;
-    unsigned int _renewCodePage = 0;
 
+    
     void _draw(void);
     void _drawNum(unsigned int pos, int value);
 
