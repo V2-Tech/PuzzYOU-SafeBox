@@ -42,7 +42,7 @@ void Safebox::begin(void)
 
 void Safebox::run(void)
 {
-    _newEncPos = _enc.read();
+    _encoderManager();
     _but.tick();
     _stepManager();
     _display.update();
@@ -77,10 +77,13 @@ void Safebox::_nextStep(void)
         _setStep(THIRD_NUM);
         break;
     case THIRD_NUM:
-        _setStep(SELECTION_1);
+        _setStep(FOURTH_NUM);
         break;
-    case SELECTION_1:
+    case FOURTH_NUM:
         _setStep(UNLOCKED);
+        break;
+    case UNLOCKED:
+        _setStep(MAIN_PAGE);
         break;
     default:
         break;
@@ -103,8 +106,11 @@ void Safebox::_prevStep(void)
     case THIRD_NUM:
         _setStep(SECOND_NUM);
         break;
-    case SELECTION_1:
+    case FOURTH_NUM:
         _setStep(THIRD_NUM);
+        break;
+    case UNLOCKED:
+        _setStep(FOURTH_NUM);
         break;
     default:
         break;
@@ -132,8 +138,8 @@ void Safebox::_stepManager(void)
         case THIRD_NUM:
             _stepThirdNum();
             break;
-        case SELECTION_1:
-            _stepSelection1();
+        case FOURTH_NUM:
+            _stepFourthNum();
             break;
         case UNLOCKED:
             _stepUnlocked();
@@ -163,20 +169,159 @@ void Safebox::_stepFirstNum(void)
 
 void Safebox::_stepSecondNum(void)
 {
+    _codeActNum[0] = _display.getCodeNum(0);
     _display.setPage(SECOND_NUM);
 }
 
 void Safebox::_stepThirdNum(void)
 {
+    _codeActNum[1] = _display.getCodeNum(1);
     _display.setPage(THIRD_NUM);
 }
 
-void Safebox::_stepSelection1(void)
+void Safebox::_stepFourthNum(void)
 {
-    _display.setPage(SELECTION_1);
+    _codeActNum[2] = _display.getCodeNum(2);
+    _display.setPage(FOURTH_NUM);
 }
 
 void Safebox::_stepUnlocked(void)
+{
+    _codeActNum[3] = _display.getCodeNum(3);
+    _checkCode();
+}
+
+void Safebox::_encoderManager(void)
+{
+    _newEncPos = _enc.read();
+    if ((_newEncPos >= _oldEncPos + 2 * KNOB_MULTIPLIER) || (_newEncPos <= _oldEncPos - 2 * KNOB_MULTIPLIER))
+    {
+        _newEncoderEvent();
+    }
+}
+
+void Safebox::_newEncoderEvent(void)
+{
+    if (_newEncPos >= _oldEncPos)
+    {
+        _encoderEventSub();
+    }
+    if (_newEncPos < _oldEncPos)
+    {
+        _encoderEventAdd();
+    }
+
+    _oldEncPos = _newEncPos;
+}
+
+void Safebox::_encoderEventAdd(void)
+{
+    unsigned int tempVal;
+
+    switch (_actStep)
+    {
+    case FIRST_NUM:
+        tempVal = _display.getCodeNum(0);
+        if (tempVal == 99)
+        {
+            break;
+        }
+        _display.setCodeNum(0, ++tempVal);
+        break;
+    case SECOND_NUM:
+        tempVal = _display.getCodeNum(1);
+        if (tempVal == 99)
+        {
+            break;
+        }
+        _display.setCodeNum(1, ++tempVal);
+        break;
+    case THIRD_NUM:
+        tempVal = _display.getCodeNum(2);
+        if (tempVal == 99)
+        {
+            break;
+        }
+        _display.setCodeNum(2, ++tempVal);
+        break;
+    case FOURTH_NUM:
+        tempVal = _display.getCodeNum(3);
+        if (tempVal == 99)
+        {
+            break;
+        }
+        _display.setCodeNum(3, ++tempVal);
+        break;
+    default:
+        break;
+    }
+}
+
+void Safebox::_encoderEventSub(void)
+{
+    unsigned int tempVal;
+
+    switch (_actStep)
+    {
+    case FIRST_NUM:
+        tempVal = _display.getCodeNum(0);
+        if (tempVal == 0)
+        {
+            break;
+        }
+        _display.setCodeNum(0, --tempVal);
+        break;
+    case SECOND_NUM:
+        tempVal = _display.getCodeNum(1);
+        if (tempVal == 0)
+        {
+            break;
+        }
+        _display.setCodeNum(1, --tempVal);
+        break;
+    case THIRD_NUM:
+        tempVal = _display.getCodeNum(2);
+        if (tempVal == 0)
+        {
+            break;
+        }
+        _display.setCodeNum(2, --tempVal);
+        break;
+    case FOURTH_NUM:
+        tempVal = _display.getCodeNum(3);
+        if (tempVal == 0)
+        {
+            break;
+        }
+        _display.setCodeNum(3, --tempVal);
+        break;
+    default:
+        break;
+    }
+}
+
+void Safebox::_checkCode(void)
+{
+    if ((_codeActNum[0] == CODE_NUM_1) && (_codeActNum[1] == CODE_NUM_2) &&
+        (_codeActNum[2] == CODE_NUM_3) && (_codeActNum[3] == CODE_NUM_4))
+    {
+        _codeOKProcedure();
+        return;
+    }
+
+    _wrongCodeProcedure();
+}
+
+void Safebox::_wrongCodeProcedure(void)
+{
+//    _setStep(MAIN_PAGE);
+//    _display.resetCodeGuiNum();
+//    _display.setPage(MAIN_PAGE);
+//    _leds.animationON(led_animation_e::error_animation, 2);
+_display.setPage(UNLOCKED);
+}
+
+void Safebox::_codeOKProcedure(void)
 {
     _display.setPage(UNLOCKED);
 }

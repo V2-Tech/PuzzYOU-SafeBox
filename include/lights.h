@@ -39,6 +39,7 @@ enum led_animation_e
 {
     start_animation = 0,
     unlock_animaiton = 1,
+    error_animation = 2,
 };
 
 typedef union
@@ -108,6 +109,8 @@ private:
     void _timerBlinkUpdate(unsigned long rate_ms);
 
     void _animationStart(void);
-    void _animationCompleted(void);
     void _animationUnlock(void);
+    void _animationError(void);
+
+    void _animationCompleted(void);
 };

@@ -33,6 +33,8 @@ private:
     state_e _actStep;
     unsigned int _newEvent = 0;
 
+    unsigned int _codeActNum[4] = {0 ,0 ,0, 0};
+
     int servoPos = 0;
 
     volatile long _oldEncPos = -999;
@@ -48,8 +50,17 @@ private:
     void _stepFirstNum(void);
     void _stepSecondNum(void);
     void _stepThirdNum(void);
-    void _stepSelection1(void);
+    void _stepFourthNum(void);
     void _stepUnlocked(void);
+
+    void _encoderManager(void);
+    void _newEncoderEvent(void);
+    void _encoderEventAdd(void);
+    void _encoderEventSub(void);
+
+    void _checkCode(void);
+    void _wrongCodeProcedure(void);
+    void _codeOKProcedure(void);
 
     void _lockDoor(void);
     void _unlockDoor(void);

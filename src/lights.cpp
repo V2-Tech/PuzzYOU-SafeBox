@@ -349,6 +349,9 @@ void Lights::_animationMode(void)
     case led_animation_e::unlock_animaiton:
         _animationUnlock();
         break;
+    case led_animation_e::error_animation:
+        _animationError();
+        break;
     default:
         break;
     }
@@ -437,8 +440,47 @@ void Lights::_animationStart(void)
     _animationCompleted();
 }
 
+void Lights::_animationUnlock(void)
+{
+}
+
+void Lights::_animationError(void)
+{
+    unsigned long _timeAnimNow = millis();
+    static unsigned long _timeAnimOld;
+    static leds_array_u oldLedArrayStatus;
+
+    if (_newAnim == 1)
+    {
+        oldLedArrayStatus = _actLedsActive;
+        _timeAnimOld = millis();
+        _newAnim = 0;
+        _setBlinkRate(BLINK_RATE_1_MS / 2);
+
+        _actLedsActive.leds.led_left_down_yl = 1;
+        _actLedsActive.leds.led_left_down_gn = 0;
+        _actLedsActive.leds.led_left_up_yl = 1;
+        _actLedsActive.leds.led_left_up_gn = 0;
+        _actLedsActive.leds.led_right_down_yl = 1;
+        _actLedsActive.leds.led_right_down_gn = 0;
+        _actLedsActive.leds.led_right_up_yl = 1;
+        _actLedsActive.leds.led_right_up_gn = 0;
+    }
+
+    if ((_timeAnimNow - _timeAnimOld) < _actAnimationDur_ms)
+    {
+        _blinkingMode();
+        return;
+    }
+
+    _actLedsActive = oldLedArrayStatus;
+    _animationCompleted();
+}
+
 void Lights::_animationCompleted(void)
 {
+    _actAnimationDur_ms = 0;
+    
     ledOFF(led_left_up_yl);
     ledOFF(led_left_up_gn);
     ledOFF(led_left_down_yl);
@@ -449,8 +491,4 @@ void Lights::_animationCompleted(void)
     ledOFF(led_right_down_gn);
 
     _setMode(led_mode_e::fixed);
-}
-
-void Lights::_animationUnlock(void)
-{
 }
