@@ -3,11 +3,6 @@
 #include "common_def.h"
 #include "icons.h"
 
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 32 // OLED display height, in pixels
-
-#define BLINK_RATE_MS 250
-
 class Gui
 {
 public:

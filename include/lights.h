@@ -1,18 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-
-#define L1_YL_PIN 10 // led left up yellow
-#define L1_GN_PIN 9  // led left up green
-#define L2_YL_PIN 14 // led left down yellow
-#define L2_GN_PIN 15 // led left down green
-#define L3_YL_PIN 16 // led right up yellow
-#define L3_GN_PIN 17 // led right up green
-#define L4_YL_PIN 12 // led right down yellow
-#define L4_GN_PIN 11 // led right down green
-
-#define BLINK_RATE_1_MS 250 // Slow blink
-#define BLINK_RATE_2_MS 500 // Fast blink
+#include "common_def.h"
 
 #define START_ANIM_DUR_MS 2500 // Fast blink
 

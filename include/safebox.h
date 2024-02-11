@@ -8,16 +8,10 @@
 //#include "VarSpeedServo.h"
 #include "lights.h"
 
-#define SERVO_PIN 6
-#define L_SPEED 20
-#define H_SPEED 100
-
-#define KNOB_PIN 4
-
 class Safebox
 {
 public:
-    Safebox() : _enc(2, 3), _but(KNOB_PIN) {}
+    Safebox() : _enc(KNOB_CLK_PIN, KNOB_DT_PIN), _but(KNOB_BUT_PIN) {}
 
     void begin(void);
     void run(void);

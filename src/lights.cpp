@@ -393,7 +393,7 @@ void Lights::_resetAnim(void)
 
 void Lights::_timersUpdate(void)
 {
-    _timerBlinkUpdate(BLINK_RATE_1_MS);
+    _timerBlinkUpdate(LIGHT_BLINK_RATE_1_MS);
 }
 
 void Lights::_setBlinkRate(unsigned long rate_ms)
@@ -438,7 +438,7 @@ void Lights::_animationStart(void)
         oldLedArrayStatus = _actLedsActive;
         _timeAnimOld = millis();
         _newAnim = 0;
-        _setBlinkRate(BLINK_RATE_1_MS);
+        _setBlinkRate(LIGHT_BLINK_RATE_1_MS);
         _actLedsActive.leds_array = 0b11111111;
     }
 
@@ -467,7 +467,7 @@ void Lights::_animationError(void)
         oldLedArrayStatus = _actLedsActive;
         _timeAnimOld = millis();
         _newAnim = 0;
-        _setBlinkRate(BLINK_RATE_1_MS / 2);
+        _setBlinkRate(LIGHT_BLINK_RATE_1_MS / 2);
 
         _actLedsActive.leds.led_left_down_yl = 1;
         _actLedsActive.leds.led_left_down_gn = 0;

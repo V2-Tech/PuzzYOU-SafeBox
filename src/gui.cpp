@@ -271,7 +271,7 @@ void Gui::_timersUpdate(void)
 void Gui::_timerBlinkUpdate(void)
 {
     _timeBlinkNow = millis();
-    if (((_timeBlinkNow - _timeBlinkOld) > BLINK_RATE_MS) &&
+    if (((_timeBlinkNow - _timeBlinkOld) > GUI_BLINK_RATE_MS) &&
         ((_actPage == FIRST_NUM) || (_actPage == SECOND_NUM) || (_actPage == THIRD_NUM) || (_actPage == FOURTH_NUM)))
     {
         _timeBlinkOld = _timeBlinkNow;
