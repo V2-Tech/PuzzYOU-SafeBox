@@ -24,84 +24,6 @@ void Lights::run(void)
     _timersUpdate();
 }
 
-void Lights::ledON(led_e led)
-{
-    if (_actMode == led_mode_e::blinking)
-    {
-        ledOFF(led_left_up_yl);
-        ledOFF(led_left_up_gn);
-        ledOFF(led_left_down_yl);
-        ledOFF(led_left_down_gn);
-        ledOFF(led_right_up_yl);
-        ledOFF(led_right_up_gn);
-        ledOFF(led_right_down_yl);
-        ledOFF(led_right_down_gn);
-    }
-
-    switch (led)
-    {
-    case led_left_up_yl:
-        digitalWrite(L1_YL_PIN, HIGH);
-        break;
-    case led_left_up_gn:
-        digitalWrite(L1_GN_PIN, HIGH);
-        break;
-    case led_left_down_yl:
-        digitalWrite(L2_YL_PIN, HIGH);
-        break;
-    case led_left_down_gn:
-        digitalWrite(L2_GN_PIN, HIGH);
-        break;
-    case led_right_up_yl:
-        digitalWrite(L3_YL_PIN, HIGH);
-        break;
-    case led_right_up_gn:
-        digitalWrite(L3_GN_PIN, HIGH);
-        break;
-    case led_right_down_yl:
-        digitalWrite(L4_YL_PIN, HIGH);
-        break;
-    case led_right_down_gn:
-        digitalWrite(L4_GN_PIN, HIGH);
-        break;
-    default:
-        break;
-    }
-}
-
-void Lights::ledOFF(led_e led)
-{
-    switch (led)
-    {
-    case led_left_up_yl:
-        digitalWrite(L1_YL_PIN, LOW);
-        break;
-    case led_left_up_gn:
-        digitalWrite(L1_GN_PIN, LOW);
-        break;
-    case led_left_down_yl:
-        digitalWrite(L2_YL_PIN, LOW);
-        break;
-    case led_left_down_gn:
-        digitalWrite(L2_GN_PIN, LOW);
-        break;
-    case led_right_up_yl:
-        digitalWrite(L3_YL_PIN, LOW);
-        break;
-    case led_right_up_gn:
-        digitalWrite(L3_GN_PIN, LOW);
-        break;
-    case led_right_down_yl:
-        digitalWrite(L4_YL_PIN, LOW);
-        break;
-    case led_right_down_gn:
-        digitalWrite(L4_GN_PIN, LOW);
-        break;
-    default:
-        break;
-    }
-}
-
 void Lights::renew(void)
 {
     _renew = 1;
@@ -183,6 +105,96 @@ void Lights::animationON(led_animation_e animation_num, unsigned long duration_s
     _resetAnim();
 }
 
+void Lights::ledON(led_e led)
+{
+    _ledON(led);
+    _setMode(led_mode_e::fixed);
+}
+
+void Lights::ledOFF(led_e led)
+{
+    _ledOFF(led);
+    _setMode(led_mode_e::fixed);
+}
+
+void Lights::_ledON(led_e led)
+{
+    if (_actMode == led_mode_e::blinking)
+    {
+        _ledOFF(led_left_up_yl);
+        _ledOFF(led_left_up_gn);
+        _ledOFF(led_left_down_yl);
+        _ledOFF(led_left_down_gn);
+        _ledOFF(led_right_up_yl);
+        _ledOFF(led_right_up_gn);
+        _ledOFF(led_right_down_yl);
+        _ledOFF(led_right_down_gn);
+    }
+
+    switch (led)
+    {
+    case led_left_up_yl:
+        digitalWrite(L1_YL_PIN, HIGH);
+        break;
+    case led_left_up_gn:
+        digitalWrite(L1_GN_PIN, HIGH);
+        break;
+    case led_left_down_yl:
+        digitalWrite(L2_YL_PIN, HIGH);
+        break;
+    case led_left_down_gn:
+        digitalWrite(L2_GN_PIN, HIGH);
+        break;
+    case led_right_up_yl:
+        digitalWrite(L3_YL_PIN, HIGH);
+        break;
+    case led_right_up_gn:
+        digitalWrite(L3_GN_PIN, HIGH);
+        break;
+    case led_right_down_yl:
+        digitalWrite(L4_YL_PIN, HIGH);
+        break;
+    case led_right_down_gn:
+        digitalWrite(L4_GN_PIN, HIGH);
+        break;
+    default:
+        break;
+    }
+}
+
+void Lights::_ledOFF(led_e led)
+{
+    switch (led)
+    {
+    case led_left_up_yl:
+        digitalWrite(L1_YL_PIN, LOW);
+        break;
+    case led_left_up_gn:
+        digitalWrite(L1_GN_PIN, LOW);
+        break;
+    case led_left_down_yl:
+        digitalWrite(L2_YL_PIN, LOW);
+        break;
+    case led_left_down_gn:
+        digitalWrite(L2_GN_PIN, LOW);
+        break;
+    case led_right_up_yl:
+        digitalWrite(L3_YL_PIN, LOW);
+        break;
+    case led_right_up_gn:
+        digitalWrite(L3_GN_PIN, LOW);
+        break;
+    case led_right_down_yl:
+        digitalWrite(L4_YL_PIN, LOW);
+        break;
+    case led_right_down_gn:
+        digitalWrite(L4_GN_PIN, LOW);
+        break;
+    default:
+        break;
+    }
+}
+
 void Lights::_ledsManager(void)
 {
     switch (_actMode)
@@ -214,121 +226,121 @@ void Lights::_blinkingMode(void)
         {
             if (_blinkStatus)
             {
-                ledON(led_left_up_yl);
+                _ledON(led_left_up_yl);
             }
             else
             {
-                ledOFF(led_left_up_yl);
+                _ledOFF(led_left_up_yl);
             }
         }
         else
         {
-            ledOFF(led_left_up_yl);
+            _ledOFF(led_left_up_yl);
         }
         if (_actLedsActive.leds.led_left_up_gn)
         {
             if (_blinkStatus)
             {
-                ledON(led_left_up_gn);
+                _ledON(led_left_up_gn);
             }
             else
             {
-                ledOFF(led_left_up_gn);
+                _ledOFF(led_left_up_gn);
             }
         }
         else
         {
-            ledOFF(led_left_up_gn);
+            _ledOFF(led_left_up_gn);
         }
         if (_actLedsActive.leds.led_left_down_yl)
         {
             if (_blinkStatus)
             {
-                ledON(led_left_down_yl);
+                _ledON(led_left_down_yl);
             }
             else
             {
-                ledOFF(led_left_down_yl);
+                _ledOFF(led_left_down_yl);
             }
         }
         else
         {
-            ledOFF(led_left_down_yl);
+            _ledOFF(led_left_down_yl);
         }
         if (_actLedsActive.leds.led_left_down_gn)
         {
             if (_blinkStatus)
             {
-                ledON(led_left_down_gn);
+                _ledON(led_left_down_gn);
             }
             else
             {
-                ledOFF(led_left_down_gn);
+                _ledOFF(led_left_down_gn);
             }
         }
         else
         {
-            ledOFF(led_left_down_gn);
+            _ledOFF(led_left_down_gn);
         }
         if (_actLedsActive.leds.led_right_up_yl)
         {
             if (_blinkStatus)
             {
-                ledON(led_right_up_yl);
+                _ledON(led_right_up_yl);
             }
             else
             {
-                ledOFF(led_right_up_yl);
+                _ledOFF(led_right_up_yl);
             }
         }
         else
         {
-            ledOFF(led_right_up_yl);
+            _ledOFF(led_right_up_yl);
         }
         if (_actLedsActive.leds.led_right_up_gn)
         {
             if (_blinkStatus)
             {
-                ledON(led_right_up_gn);
+                _ledON(led_right_up_gn);
             }
             else
             {
-                ledOFF(led_right_up_gn);
+                _ledOFF(led_right_up_gn);
             }
         }
         else
         {
-            ledOFF(led_right_up_gn);
+            _ledOFF(led_right_up_gn);
         }
         if (_actLedsActive.leds.led_right_down_yl)
         {
             if (_blinkStatus)
             {
-                ledON(led_right_down_yl);
+                _ledON(led_right_down_yl);
             }
             else
             {
-                ledOFF(led_right_down_yl);
+                _ledOFF(led_right_down_yl);
             }
         }
         else
         {
-            ledOFF(led_right_down_yl);
+            _ledOFF(led_right_down_yl);
         }
         if (_actLedsActive.leds.led_right_down_gn)
         {
             if (_blinkStatus)
             {
-                ledON(led_right_down_gn);
+                _ledON(led_right_down_gn);
             }
             else
             {
-                ledOFF(led_right_down_gn);
+                _ledOFF(led_right_down_gn);
             }
         }
         else
         {
-            ledOFF(led_right_down_gn);
+            _ledOFF(led_right_down_gn);
         }
         _renew = 0;
     }
@@ -362,14 +374,14 @@ void Lights::_reset(void)
     _actLedsActive.leds_array = 0;
     _newAnim = 1;
 
-    ledOFF(led_left_up_yl);
-    ledOFF(led_left_up_gn);
-    ledOFF(led_left_down_yl);
-    ledOFF(led_left_down_gn);
-    ledOFF(led_right_up_yl);
-    ledOFF(led_right_up_gn);
-    ledOFF(led_right_down_yl);
-    ledOFF(led_right_down_gn);
+    _ledOFF(led_left_up_yl);
+    _ledOFF(led_left_up_gn);
+    _ledOFF(led_left_down_yl);
+    _ledOFF(led_left_down_gn);
+    _ledOFF(led_right_up_yl);
+    _ledOFF(led_right_up_gn);
+    _ledOFF(led_right_down_yl);
+    _ledOFF(led_right_down_gn);
 
     _setMode(led_mode_e::fixed);
 }
@@ -480,15 +492,15 @@ void Lights::_animationError(void)
 void Lights::_animationCompleted(void)
 {
     _actAnimationDur_ms = 0;
-    
-    ledOFF(led_left_up_yl);
-    ledOFF(led_left_up_gn);
-    ledOFF(led_left_down_yl);
-    ledOFF(led_left_down_gn);
-    ledOFF(led_right_up_yl);
-    ledOFF(led_right_up_gn);
-    ledOFF(led_right_down_yl);
-    ledOFF(led_right_down_gn);
-
     _setMode(led_mode_e::fixed);
+
+    _ledOFF(led_left_up_gn);
+    _ledOFF(led_left_down_gn);
+    _ledOFF(led_right_up_gn);
+    _ledOFF(led_right_down_gn);
+
+    _ledON(led_left_up_yl);
+    _ledON(led_left_down_yl);
+    _ledON(led_right_up_yl);
+    _ledON(led_right_down_yl);
 }

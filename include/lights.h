@@ -95,6 +95,9 @@ private:
     unsigned int _renew = 0;
     unsigned int _newAnim = 0;
 
+    void _ledON(led_e led);
+    void _ledOFF(led_e led);
+
     void _ledsManager(void);
     void _setMode(led_mode_e mode);
     void _blinkingMode(void);

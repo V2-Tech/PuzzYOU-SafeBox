@@ -2,9 +2,10 @@
 #include <Arduino.h>
 #include <OneButton.h>
 #include <Encoder.h>
+#include <Servo.h>
 #include "common_def.h"
 #include "gui.h"
-#include "VarSpeedServo.h"
+//#include "VarSpeedServo.h"
 #include "lights.h"
 
 #define SERVO_PIN 6
@@ -25,7 +26,8 @@ public:
 
 private:
     Gui _display;
-    VarSpeedServo _servo;
+    //VarSpeedServo _servo;
+    Servo _servo;
     Lights _leds;
     Encoder _enc;
     OneButton _but;
@@ -33,7 +35,7 @@ private:
     state_e _actStep;
     unsigned int _newEvent = 0;
 
-    unsigned int _codeActNum[4] = {0 ,0 ,0, 0};
+    unsigned int _codeActNum[4] = {0, 0, 0, 0};
 
     int servoPos = 0;
 
@@ -59,6 +61,11 @@ private:
     void _encoderEventSub(void);
 
     void _checkCode(void);
+    void _checkCodeNum(unsigned int pos);
+    void _checkCodeNum1(void);
+    void _checkCodeNum2(void);
+    void _checkCodeNum3(void);
+    void _checkCodeNum4(void);
     void _wrongCodeProcedure(void);
     void _codeOKProcedure(void);
 

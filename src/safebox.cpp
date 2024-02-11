@@ -170,24 +170,28 @@ void Safebox::_stepFirstNum(void)
 void Safebox::_stepSecondNum(void)
 {
     _codeActNum[0] = _display.getCodeNum(0);
+    _checkCodeNum(1);
     _display.setPage(SECOND_NUM);
 }
 
 void Safebox::_stepThirdNum(void)
 {
     _codeActNum[1] = _display.getCodeNum(1);
+    _checkCodeNum(2);
     _display.setPage(THIRD_NUM);
 }
 
 void Safebox::_stepFourthNum(void)
 {
     _codeActNum[2] = _display.getCodeNum(2);
+    _checkCodeNum(3);
     _display.setPage(FOURTH_NUM);
 }
 
 void Safebox::_stepUnlocked(void)
 {
     _codeActNum[3] = _display.getCodeNum(3);
+    _checkCodeNum(4);
     _checkCode();
 }
 
@@ -312,28 +316,99 @@ void Safebox::_checkCode(void)
     _wrongCodeProcedure();
 }
 
+void Safebox::_checkCodeNum(unsigned int pos)
+{
+    switch (pos)
+    {
+    case 1:
+        _checkCodeNum1();
+        break;
+    case 2:
+        _checkCodeNum2();
+        break;
+    case 3:
+        _checkCodeNum3();
+        break;
+    case 4:
+        _checkCodeNum4();
+        break;
+    default:
+        break;
+    }
+}
+
+void Safebox::_checkCodeNum1(void)
+{
+    if (_codeActNum[0] == CODE_NUM_1)
+    {
+        _leds.ledON(led_e::led_left_up_gn);
+        return;
+    }
+    _leds.ledOFF(led_e::led_left_up_gn);
+}
+
+void Safebox::_checkCodeNum2(void)
+{
+    if (_codeActNum[1] == CODE_NUM_2)
+    {
+        _leds.ledON(led_e::led_left_down_gn);
+        return;
+    }
+    _leds.ledOFF(led_e::led_left_down_gn);
+}
+
+void Safebox::_checkCodeNum3(void)
+{
+    if (_codeActNum[2] == CODE_NUM_3)
+    {
+        _leds.ledON(led_e::led_right_down_gn);
+        return;
+    }
+    _leds.ledOFF(led_e::led_right_down_gn);
+}
+
+void Safebox::_checkCodeNum4(void)
+{
+    if (_codeActNum[3] == CODE_NUM_4)
+    {
+        _leds.ledON(led_e::led_right_up_gn);
+        return;
+    }
+    _leds.ledOFF(led_e::led_right_up_gn);
+}
+
 void Safebox::_wrongCodeProcedure(void)
 {
-//    _setStep(MAIN_PAGE);
-//    _display.resetCodeGuiNum();
-//    _display.setPage(MAIN_PAGE);
-//    _leds.animationON(led_animation_e::error_animation, 2);
-_display.setPage(UNLOCKED);
+    _setStep(MAIN_PAGE);
+    _display.resetCodeGuiNum();
+    _display.setPage(MAIN_PAGE);
+    _leds.animationON(led_animation_e::error_animation, 2);
+    //_display.setPage(UNLOCKED);
+
+    _leds.ledOFF(led_left_up_gn);
+    _leds.ledOFF(led_left_down_gn);
+    _leds.ledOFF(led_right_up_gn);
+    _leds.ledOFF(led_right_down_gn);
+
+    _lockDoor();
 }
 
 void Safebox::_codeOKProcedure(void)
 {
     _display.setPage(UNLOCKED);
+    _unlockDoor();
 }
 
 void Safebox::_lockDoor(void)
 {
-    _servo.write(8, H_SPEED, true);
+    //_servo.write(8, H_SPEED, true);
+    _servo.write(9);
 }
 
 void Safebox::_unlockDoor(void)
 {
-    _servo.write(90, L_SPEED, false);
+    //_servo.write(90, L_SPEED, false);
+    _servo.write(90);
 }
 
 void Safebox::_singleClickEvent(void)
@@ -343,14 +418,14 @@ void Safebox::_singleClickEvent(void)
 
 void Safebox::_doubleClickEvent(void)
 {
-    //    static unsigned int status = 0;
-    //    if (status == 0)
-    //    {
-    //        status = 1;
-    //        _lockDoor();
-    //        return;
-    //    }
-    //    _unlockDoor();
-    //    status = 0;
+    // static unsigned int status = 0;
+    // if (status == 0)
+    //{
+    //     status = 1;
+    //     _lockDoor();
+    //     return;
+    // }
+    //_unlockDoor();
+    // status = 0;
     _prevStep();
 }
